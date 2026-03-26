@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abishangar Muraleetharan — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #050810;
+      --surface: #0c1220;
+      --surface2: #111827;
+      --border: rgba(99,179,237,0.12);
+      --accent: #63b3ed;
+      --accent2: #7c3aed;
+      --accent3: #10b981;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --glow: rgba(99,179,237,0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* NOISE TEXTURE */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* GRID LINES */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(99,179,237,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,179,237,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 20px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(20px);
+      background: rgba(5,8,16,0.8);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+    }
+
+    .nav-links { display: flex; gap: 40px; }
+    .nav-links a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(99,179,237,0.06) 0%, rgba(124,58,237,0.04) 40%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 80px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hero-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 30px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+
+    .name-highlight {
+      background: linear-gradient(135deg, #63b3ed, #7c3aed, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 540px;
+      margin-bottom: 40px;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.3s, transform 0.3s;
+      display: inline-block;
+    }
+    .btn-primary:hover { opacity: 0.85; transform: translateY(-2px); }
+
+    .btn-outline {
+      padding: 14px 32px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.3s, background 0.3s;
+      display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--accent); background: var(--glow); }
+
+    /* AVATAR */
+    .hero-avatar-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .avatar-ring {
+      position: absolute;
+      inset: -16px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, transparent 60%, var(--accent) 80%, var(--accent2) 90%, transparent 100%);
+      animation: spin 6s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .avatar-ring2 {
+      position: absolute;
+      inset: -32px;
+      border-radius: 50%;
+      background: conic-gradient(from 180deg, transparent 70%, var(--accent3) 85%, transparent 100%);
+      animation: spin 10s linear infinite reverse;
+    }
+
+    .avatar-img {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      object-fit: cover;
+      position: relative;
+      z-index: 2;
+      border: 3px solid var(--surface2);
+    }
+
+    .avatar-badge {
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent3);
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dot-live {
+      width: 6px; height: 6px;
+      background: var(--accent3);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+
+    /* SECTION BASE */
+    section {
+      padding: 100px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent2);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 60px;
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 1.05rem;
+      margin-bottom: 20px;
+    }
+
+    .info-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: border-color 0.3s;
+    }
+    .info-card:hover { border-color: var(--accent); }
+
+    .info-card-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .info-card-value {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    /* INTERESTS */
+    .interests-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .interest-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      transition: transform 0.3s, border-color 0.3s, background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .interest-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--card-color), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .interest-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--card-color);
+    }
+
+    .interest-card:hover::before { opacity: 1; }
+
+    .interest-icon {
+      font-size: 2.4rem;
+      margin-bottom: 20px;
+    }
+
+    .interest-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--card-color);
+    }
+
+    .interest-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .skill-bar-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+    }
+
+    .skill-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .skill-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .skill-pct {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+    }
+
+    .skill-track {
+      height: 4px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform-origin: left;
+      animation: fillBar 1.5s cubic-bezier(0.4,0,0.2,1) forwards;
+      transform: scaleX(0);
+    }
+
+    @keyframes fillBar { to { transform: scaleX(1); } }
+
+    /* EDUCATION */
+    .edu-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 28px;
+      align-items: start;
+      transition: border-color 0.3s;
+    }
+    .edu-card:hover { border-color: var(--accent); }
+
+    .edu-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .edu-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .edu-degree {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent3);
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+
+    .edu-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* CONTACT */
+    #contact {
+      padding-bottom: 140px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .contact-text h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .contact-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 32px;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.9rem;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .contact-link:hover { border-color: var(--accent); background: var(--glow); }
+
+    .contact-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    /* CONTACT FORM */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .form-input, .form-textarea {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      transition: border-color 0.3s;
+      outline: none;
+      resize: none;
+    }
+
+    .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-copy {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    .footer-made {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    /* FLOATING PARTICLES */
+    .particle {
+      position: fixed;
+      pointer-events: none;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.3;
+      animation: float var(--dur) ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: 0.1; }
+      50% { transform: translateY(var(--ty)) translateX(var(--tx)); opacity: 0.3; }
+    }
+
+    /* SCROLL ANIMATIONS */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* DIVIDER */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      nav .nav-links { display: none; }
+      #hero, section, footer { padding-left: 24px; padding-right: 24px; }
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero-inner .hero-avatar-wrap { order: -1; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; }
+      .interests-grid { grid-template-columns: 1fr; }
+      .info-cards { grid-template-columns: 1fr; }
+      .section-divider { margin: 0 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PARTICLES -->
+<script>
+  for (let i = 0; i < 12; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3 + 1;
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      --dur:${6+Math.random()*8}s;
+      --ty:${(Math.random()-0.5)*60}px;
+      --tx:${(Math.random()-0.5)*40}px;
+      animation-delay:${Math.random()*5}s;
+    `;
+    document.body.appendChild(p);
+  }
+</script>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">AM_</div>
+  <div class="nav-links">
+    <a href="#about">about</a>
+    <a href="#interests">interests</a>
+    <a href="#education">education</a>
+    <a href="#contact">contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag">Software Developer & Student</div>
+      <h1>
+        Hi, I'm<br>
+        <span class="name-highlight">Abishangar</span>
+      </h1>
+      <p class="hero-desc">
+        A passionate learner from Kondavil, Jaffna — Sri Lanka,
+        with a deep love for Mathematics, Computer Science, and Physics.
+        Building knowledge, one equation at a time.
+      </p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn-primary">Get in Touch</a>
+        <a href="#about" class="btn-outline">Learn More</a>
+      </div>
+    </div>
+    <div class="hero-avatar-wrap">
+      <div class="avatar-ring2"></div>
+      <div class="avatar-ring"></div>
+      <img
+        class="avatar-img"
+        src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAx"
+        onerror="this.onerror=null;this.src='/mnt/user-data/uploads/logo.jpeg';"
+        id="avatar"
+        alt="Abishangar Muraleetharan"
+      />
+      <div class="avatar-badge">
+        <div class="dot-live"></div>
+        Open to Opportunities
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-tag">// 01. about</div>
+  <h2 class="section-title">Who I Am</h2>
+  <div class="about-grid fade-in">
+    <div class="about-text">
+      <p>
+        I'm <strong>Abishangar Muraleetharan</strong>, a bright young mind from
+        <strong>Kondavil, Jaffna, Sri Lanka</strong>. Currently pursuing my studies at
+        Jaffna Hindu College, I'm deeply passionate about the intersections of
+        Mathematics, Computer Science, and Physics.
+      </p>
+      <p>
+        Born on <strong>December 10, 2006</strong>, I'm driven by curiosity and a desire to
+        understand the fundamental laws that govern our universe — from abstract mathematical
+        proofs to the elegance of algorithms and the beauty of physical phenomena.
+      </p>
+      <p>
+        I believe in building a strong foundation of knowledge that will allow me to
+        contribute meaningfully to the fields of technology and science.
+      </p>
+    </div>
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="info-card-label">📍 Location</div>
+        <div class="info-card-value">Kondavil, Jaffna<br>Sri Lanka</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">🎂 Born</div>
+        <div class="info-card-value">December 10, 2006</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">📧 Email</div>
+        <div class="info-card-value" style="font-size:0.78rem">abishangar.acer<br>@gmail.com</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">📞 Phone</div>
+        <div class="info-card-value">+94 774 199 116</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- INTERESTS -->
+<section id="interests">
+  <div class="section-tag">// 02. interests</div>
+  <h2 class="section-title">What Drives Me</h2>
+  <div class="interests-grid fade-in">
+    <div class="interest-card" style="--card-color:#63b3ed">
+      <div class="interest-icon">∑</div>
+      <div class="interest-title">Mathematics</div>
+      <div class="interest-desc">
+        From algebra and calculus to number theory and combinatorics — I find beauty
+        in the abstract language that underpins all of science and engineering.
+      </div>
+    </div>
+    <div class="interest-card" style="--card-color:#7c3aed">
+      <div class="interest-icon">⌨️</div>
+      <div class="interest-title">Computer Science</div>
+      <div class="interest-desc">
+        Algorithms, data structures, and problem-solving captivate me.
+        I enjoy understanding how computers think and how software shapes the world.
+      </div>
+    </div>
+    <div class="interest-card" style="--card-color:#10b981">
+      <div class="interest-icon">⚛️</div>
+      <div class="interest-title">Physics</div>
+      <div class="interest-desc">
+        The laws of nature, from classical mechanics to quantum phenomena,
+        inspire me to ask deeper questions about the reality we inhabit.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-tag">// 03. skills</div>
+  <h2 class="section-title">Core Competencies</h2>
+  <div class="skills-grid fade-in">
+    <div class="skill-bar-item">
+      <div class="skill-header">
+        <span class="skill-name">Mathematical Problem Solving</span>
+        <span class="skill-pct">92%</span>
+      </div>
+      <div class="skill-track"><div class="skill-fill" style="width:92%"></div></div>
+    </div>
+    <div class="skill-bar-item">
+      <div class="skill-header">
+        <span class="skill-name">Logical Reasoning</span>
+        <span class="skill-pct">90%</span>
+      </div>
+      <div class="skill-track"><div class="skill-fill" style="width:90%"></div></div>
+    </div>
+    <div class="skill-bar-item">
+      <div class="skill-header">
+        <span class="skill-name">Programming Fundamentals</span>
+        <span class="skill-pct">78%</span>
+      </div>
+      <div class="skill-track"><div class="skill-fill" style="width:78%"></div></div>
+    </div>
+    <div class="skill-bar-item">
+      <div class="skill-header">
+        <span class="skill-name">Physics & Mechanics</span>
+        <span class="skill-pct">85%</span>
+      </div>
+      <div class="skill-track"><div class="skill-fill" style="width:85%"></div></div>
+    </div>
+    <div class="skill-bar-item">
+      <div class="skill-header">
+        <span class="skill-name">Analytical Thinking</span>
+        <span class="skill-pct">88%</span>
+      </div>
+      <div class="skill-track"><div class="skill-fill" style="width:88%"></div></div>
+    </div>
+    <div class="skill-bar-item">
+      <div class="skill-header">
+        <span class="skill-name">Research & Learning</span>
+        <span class="skill-pct">95%</span>
+      </div>
+      <div class="skill-track"><div class="skill-fill" style="width:95%"></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-tag">// 04. education</div>
+  <h2 class="section-title">Academic Journey</h2>
+  <div class="fade-in" style="max-width:720px">
+    <div class="edu-card">
+      <div class="edu-icon">🏫</div>
+      <div>
+        <div class="edu-name">Jaffna Hindu College</div>
+        <div class="edu-degree">Secondary Education · Jaffna, Sri Lanka</div>
+        <div class="edu-desc">
+          Pursuing advanced studies with a strong focus on Mathematics, Physics,
+          and Computer Science. Developing a rigorous analytical mindset through
+          the Sri Lankan national curriculum with A/L sciences stream preparation.
+          Actively engaging in problem-solving competitions and academic exploration.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-tag">// 05. contact</div>
+  <h2 class="section-title">Let's Connect</h2>
+  <div class="contact-grid fade-in">
+    <div class="contact-text">
+      <h3>Open to Collaborations &amp; Opportunities</h3>
+      <p>
+        Whether you want to discuss a project, share knowledge about
+        mathematics and computer science, or just say hello — I'd love to
+        hear from you.
+      </p>
+      <div class="contact-links">
+        <a href="mailto:abishangar.acer@gmail.com" class="contact-link">
+          <div class="contact-icon" style="background:rgba(99,179,237,0.1)">📧</div>
+          <div>
+            <div style="font-weight:600;margin-bottom:2px">Email</div>
+            <div style="font-size:0.8rem;color:var(--muted)">abishangar.acer@gmail.com</div>
+          </div>
+        </a>
+        <a href="tel:+94774199116" class="contact-link">
+          <div class="contact-icon" style="background:rgba(16,185,129,0.1)">📞</div>
+          <div>
+            <div style="font-weight:600;margin-bottom:2px">Phone</div>
+            <div style="font-size:0.8rem;color:var(--muted)">+94 774 199 116</div>
+          </div>
+        </a>
+        <div class="contact-link">
+          <div class="contact-icon" style="background:rgba(124,58,237,0.1)">📍</div>
+          <div>
+            <div style="font-weight:600;margin-bottom:2px">Location</div>
+            <div style="font-size:0.8rem;color:var(--muted)">Kondavil, Jaffna, Sri Lanka</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-group">
+        <label class="form-label">Your Name</label>
+        <input class="form-input" type="text" placeholder="John Doe" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" type="email" placeholder="john@example.com" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-textarea" rows="5" placeholder="Write your message here..." required></textarea>
+      </div>
+      <button type="submit" class="btn-primary" style="width:100%;text-align:center">
+        Send Message →
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-copy">© 2025 Abishangar Muraleetharan. All rights reserved.</div>
+  <div class="footer-made">Designed with ♥ in Sri Lanka 🇱🇰</div>
+</footer>
+
+<script>
+  // Load actual avatar
+  const img = document.getElementById('avatar');
+  img.src = '/mnt/user-data/uploads/logo.jpeg';
+  img.onerror = function() {
+    this.style.background = 'linear-gradient(135deg,#63b3ed,#7c3aed)';
+    this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Crect fill='%23111827' width='300' height='300' rx='150'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='100' fill='%2363b3ed' font-family='Arial'%3EAM%3C/text%3E%3C/svg%3E";
+  };
+
+  // Scroll animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Form handler
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.textContent = 'Message Sent! ✓';
+    btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+    setTimeout(() => {
+      btn.textContent = 'Send Message →';
+      btn.style.background = '';
+      e.target.reset();
+    }, 3000);
+  }
+
+  // Active nav
+  const sections = document.querySelectorAll('section[id]');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY + 100;
+    sections.forEach(s => {
+      const top = s.offsetTop, h = s.offsetHeight;
+      if (y >= top && y < top + h) {
+        document.querySelectorAll('.nav-links a').forEach(a => {
+          a.style.color = a.getAttribute('href') === '#' + s.id ? 'var(--accent)' : '';
+        });
+      }
+    });
+  });
+</script>
+</body>
+</html>
